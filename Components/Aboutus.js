@@ -24,7 +24,7 @@ class Aboutus extends Component
             return(
                 <ListItem key={index} title={item.name} leftAvatar={{source:require('./images/alberto.png')}}
                 hideCherovon={true} subtitle={item.description}/>
-            )
+            );
         };
         return(
                 <ScrollView>
