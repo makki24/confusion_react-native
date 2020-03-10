@@ -7,6 +7,8 @@ import {createDrawerNavigator,createStackNavigator,DrawerItems} from "react-navi
 import Contactus from "./Contactus";
 import Aboutus from "./Aboutus";
 import {Icon} from "react-native-elements";
+import {connect} from "react-redux";
+import {fetchComments, fetchDishes,fetchLeaders, fetchPromos} from "../redux/ActionCreaters";
 
 const MenuNavigator = createStackNavigator({
     Menu: {screen: Menu,
@@ -148,9 +150,34 @@ const MainNavigator= createDrawerNavigator({
     drawerBackgroundColor: '#D1C4E9',
     contentComponent: CustomDrawerComponent
   });
+
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
+})
 class Main extends Component
 {
+      componentDidMount() {
+    this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
+    this.props.fetchLeaders();
+  };
+
+
     render() {
+        console.disableYellowBox = true;
         return (
             <View style={{flex:1, paddingTop: Platform.OS=="ios" ?0 :Expo.Constants.statusBarHeight}}>
                 <MainNavigator />
@@ -185,4 +212,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

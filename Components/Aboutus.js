@@ -1,16 +1,22 @@
 import React, {Component} from "react";
 import {FlatList, ScrollView, Text, View} from "react-native";
 import {Card, ListItem} from "react-native-elements";
-import {LEADERS} from "../shared/leaders";
+import {connect} from "react-redux";
+
+const mapStateToProps = state => {
+    return {
+      dishes: state.dishes,
+      comments: state.comments,
+      promotions: state.promotions,
+      leaders: state.leaders
+    }
+  }
 
 class Aboutus extends Component
 {
     constructor(props)
     {
         super(props);
-        this.state={
-            leaders:LEADERS
-        }
     }
 
     static navigationOptions={
@@ -40,11 +46,11 @@ class Aboutus extends Component
                         </Text>
                     </Card>
                     <Card title={"Corporate Leadership"}>
-                        <FlatList data={this.state.leaders} renderItem={renderLeaderItem} keyExtractor={(item) =>item.id.toString()} />
+                        <FlatList data={this.props.leaders.leaders} renderItem={renderLeaderItem} keyExtractor={(item) =>item.id.toString()} />
                     </Card>
                 </ScrollView>
         );
     }
 }
 
-export default Aboutus;
+export default connect(mapStateToProps)(Aboutus);

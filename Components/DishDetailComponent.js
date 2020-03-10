@@ -2,8 +2,15 @@ import React,{Component} from "react";
 import {Card, Icon, ListItem} from "react-native-elements";
 import {FlatList, ScrollView, Text} from "react-native";
 import {View} from "react-native";
-import {DISHES} from "../shared/dishes";
-import {COMMENTS} from "../shared/comments";
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+
+const mapStateToProps = state => {
+    return {
+      dishes: state.dishes,
+      comments: state.comments
+    }
+  }
 
 function RenderDish(props)
 {
@@ -11,7 +18,7 @@ function RenderDish(props)
     if(dish!=null)
     {
          return(
-            <Card featuredTitle={dish.name} image={require('./images/uthappizza.png')}>
+            <Card featuredTitle={dish.name} image={{uri:baseUrl+dish.image}}>
                 <Text style={{margin:10}}>{dish.description}</Text>
                 <Icon name={props.favorite ? 'heart':'heart-o'}
                       raised
@@ -51,15 +58,14 @@ function RenderComments(props)
     );
 }
 
+
 class DishDetail extends Component
 {
     constructor(props)
     {
         super(props);
         this.state={
-            dishes:DISHES,
             faviorates:[],
-            comments:COMMENTS
         }
     }
     markstate(id)
@@ -82,13 +88,13 @@ class DishDetail extends Component
         const dishId=this.props.navigation.getParam("dishId","");
         return(
             <ScrollView>
-                <RenderDish dish={this.state.dishes[+dishId]} favorite={this.state.faviorates.some((id)=>dishId===id)} onPress={
+                <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.state.faviorates.some((id)=>dishId===id)} onPress={
                     (id)=>this.markstate(id)
                 } remove={(id)=>this.remove(id)} />
-                <RenderComments comments={this.state.comments.filter((comment) =>comment.dishId===dishId)}/>
+                <RenderComments comments={this.props.comments.comments.filter((comment) =>comment.dishId===dishId)}/>
             </ScrollView>
         );
     }
 }
 
-export default DishDetail;
+export default connect(mapStateToProps)(DishDetail);

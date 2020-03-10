@@ -1,17 +1,27 @@
 import React, {Component} from "react";
 import {ScrollView, Text} from "react-native";
 import {View} from "react-native";
-import {DISHES} from "../shared/dishes";
-import {LEADERS} from "../shared/leaders";
-import {PROMOTIONS} from "../shared/promotions";
 import {Card} from "react-native-elements";
+import {connect} from 'react-redux';
+import {baseUrl} from "../shared/baseUrl";
+
+
+const mapStateToProps = state => {
+    return {
+      dishes: state.dishes,
+      comments: state.comments,
+      promotions: state.promotions,
+      leaders: state.leaders
+    }
+  }
+
 
 function RenderItem(props)
 {
     const item=props.item;
     if(item!=null)
     {
-        return(<Card featuredTitle={item.name} featuredSubtitle={item.designation} image={require('./images/uthappizza.png')}>
+        return(<Card featuredTitle={item.name} featuredSubtitle={item.designation} image={{uri:baseUrl+item.image}}>
             <Text style={{margin: 10}}>{item.description}</Text>
         </Card>);
     }
@@ -22,15 +32,6 @@ function RenderItem(props)
 }
 class Home extends Component
 {
-    constructor(props)
-    {
-        super(props);
-        this.state={
-            dishes: DISHES,
-            leaders: LEADERS,
-            promotions: PROMOTIONS
-        }
-    }
 
     static navigationOptions={
         title:'Home'
@@ -39,12 +40,12 @@ class Home extends Component
     {
         return (
             <ScrollView>
-                <RenderItem item={this.state.dishes.filter(item=> item.featured)[0]}/>
-                <RenderItem item={this.state.promotions.filter(item=> item.featured)[0]}/>
-                <RenderItem item={this.state.leaders.filter(item=> item.featured)[0]}/>
+                <RenderItem item={this.props.dishes.dishes.filter(item=> item.featured)[0]}/>
+                <RenderItem item={this.props.promotions.promotions.filter(item=> item.featured)[0]}/>
+                <RenderItem item={this.props.leaders.leaders.filter(item=> item.featured)[0]}/>
             </ScrollView>
         )
     }
 }
 
-export default Home;
+export default connect(mapStateToProps)(Home);
