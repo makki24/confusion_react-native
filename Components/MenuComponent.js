@@ -1,24 +1,36 @@
 import React, {Component} from "react";
-import {FlatList} from "react-native";
+import {FlatList, Text,View} from "react-native";
 import { Tile} from "react-native-elements";
-import {DISHES} from "../shared/dishes";
 import {baseUrl} from "../shared/baseUrl";
+import {connect} from "react-redux";
+import {Loading} from "./LoadingComponent";
+
+const mapStateToProps = state =>
+{
+    return {
+        dishes: state.dishes,
+    }
+}
 
 class Menu extends Component
 {
-    constructor(props)
-    {
-        super(props);
-        this.state={
-            dishes:DISHES
-        }
-    }
-
     static navigationOptions={
         title:'Menu'
     };
     render()
     {
+        if(this.props.dishes.isLoading)
+        {
+            return (<Loading/> );
+        }
+        else if(this.props.dishes.errMess)
+        {
+            return (
+                <View>
+                    <Text>{this.props.dishes.errMess}</Text>
+                </View>
+            )
+        }
         const renderMenuItem =({item,index}) =>
         {
             return(
@@ -30,9 +42,9 @@ class Menu extends Component
                 />
             );
         };
-        return(<FlatList data={this.state.dishes} renderItem={renderMenuItem}
+        return(<FlatList data={this.props.dishes.dishes} renderItem={renderMenuItem}
                   keyExtractor={(item) => item.id.toString()}/>)
     }
 }
 
-export default Menu;
+export default connect(mapStateToProps)(Menu);

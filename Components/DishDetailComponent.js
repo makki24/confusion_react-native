@@ -4,14 +4,22 @@ import {FlatList, ScrollView, Text} from "react-native";
 import {View} from "react-native";
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import {fetchFaviourates} from "../redux/ActionCreaters";
 
 const mapStateToProps = state => {
     return {
       dishes: state.dishes,
-      comments: state.comments
+      comments: state.comments,
+      faviorates: state.faviourates
     }
   }
 
+  const mapDispatchToProps =dispatch =>
+  {
+      return {
+          fetchFaviourates: (id) => dispatch(fetchFaviourates(id))
+      }
+  }
 function RenderDish(props)
 {
     const dish=props.dish;
@@ -23,7 +31,7 @@ function RenderDish(props)
                 <Icon name={props.favorite ? 'heart':'heart-o'}
                       raised
                       reverse
-                      onPress={props.favorite?()=>props.remove(dish.id):()=>props.onPress(dish.id)}
+                      onPress={props.onPress(dish.id)}
                       type={'font-awesome'}
                       color={'#f50'}
                       />
@@ -64,21 +72,11 @@ class DishDetail extends Component
     constructor(props)
     {
         super(props);
-        this.state={
-            faviorates:[],
-        }
+
     }
     markstate(id)
     {
-        this.setState({
-            faviorates:this.state.faviorates.concat(id)
-        });
-    }
-    remove(id)
-    {
-        this.setState({
-            faviorates:this.state.faviorates.filter((dishId)=> dishId!=id)
-        });
+        this.props.fetchFaviourates(id);
     }
     static navigationOptions={
         title: "Dish Details"
@@ -88,7 +86,7 @@ class DishDetail extends Component
         const dishId=this.props.navigation.getParam("dishId","");
         return(
             <ScrollView>
-                <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.state.faviorates.some((id)=>dishId===id)} onPress={
+                <RenderDish dish={this.props.dishes.dishes[+dishId]} favorite={this.props.faviorates.some((id)=>dishId===id)} onPress={
                     (id)=>this.markstate(id)
                 } remove={(id)=>this.remove(id)} />
                 <RenderComments comments={this.props.comments.comments.filter((comment) =>comment.dishId===dishId)}/>
@@ -97,4 +95,4 @@ class DishDetail extends Component
     }
 }
 
-export default connect(mapStateToProps)(DishDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(DishDetail);
