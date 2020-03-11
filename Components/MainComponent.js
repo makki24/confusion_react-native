@@ -9,6 +9,7 @@ import Aboutus from "./Aboutus";
 import {Icon} from "react-native-elements";
 import {connect} from "react-redux";
 import {fetchComments, fetchDishes,fetchLeaders, fetchPromos} from "../redux/ActionCreaters";
+import Reservation from "./ReserveTable";
 
 const MenuNavigator = createStackNavigator({
     Menu: {screen: Menu,
@@ -84,6 +85,23 @@ const AboutusNavigator = createStackNavigator({
         })
 });
 
+const ReservationNavigator = createStackNavigator({
+    Reservation: { screen: Reservation }
+  }, {
+    navigationOptions:({navigation}) =>({
+            headerStyle :{
+                backgroundColor: "#512DA8",
+            },
+            headerTintColor:'#fff',
+            headerTitleStyle: {
+                color:'#fff'
+            },
+            headerLeft: <Icon name={'menu'} size={24}
+                    color={'white'}
+                    onPress={()=>navigation.toggleDrawer() } />
+        })
+});
+
 const CustomDrawerComponent=(props) =>(
     <ScrollView>
         <SafeAreaView style={styles.container}
@@ -142,6 +160,17 @@ const MainNavigator= createDrawerNavigator({
             drawerLabel: 'Contact us',
              drawerIcon:({tintColor}) =>
                     (<Icon name={'address-card'} type={'font-awesome'} color={tintColor}
+                           size={23} />)
+        }
+        },
+
+     Reservation: {
+        screen: ReservationNavigator,
+        navigationOptions: {
+            title: "Reserve Table",
+            drawerLabel: 'Reserve Table',
+            drawerIcon:({tintColor}) =>
+                    (<Icon name={'cutlery'} type={'font-awesome'} color={tintColor}
                            size={23} />)
         }
         }
