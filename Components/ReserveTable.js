@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ScrollView, Text, View, StyleSheet, Switch, Button} from "react-native";
+import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal} from "react-native";
 import {Picker} from "react-native";
 import DatePicker from "react-native-datepicker";
 
@@ -18,6 +18,19 @@ const styles =StyleSheet.create({
 
     formItem:{
         flex: 1
+    },
+     modal: {
+       justifyContent: 'center',
+       margin: 20
+    },
+    modalTitle: {
+        backgroundColor: '#512DA8',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    modalText: {
+        fontSize: 18,
+        margin: 10
     }
 });
 
@@ -30,7 +43,8 @@ class Reservation extends Component
         this.state={
             guests: 1,
             outside: false,
-            date:''
+            date:'',
+            showModel:false
         }
     }
 
@@ -38,14 +52,25 @@ class Reservation extends Component
             title: 'Reserve Table '
     }
 
+    toggleModal()
+    {
+        this.setState({
+            showModel:!this.state.showModel
+        });
+    }
     handleReserve()
     {
         console.log(JSON.stringify(this.state));
+        this.toggleModal();
+    }
+
+    formReset()
+    {
         this.setState({
             guests:1,
             outside:false,
             date:''
-        })
+        });
     }
     render()
     {
@@ -95,6 +120,18 @@ class Reservation extends Component
                 <View style={styles.formRow}>
                     <Button title={'Reserve'} onPress={()=>this.handleReserve()} color={'#512DA8'} accessibilityLabel={'learn More'}/>
                 </View>
+                 <Modal onDismiss={() =>this.toggleModal()} visible={this.state.showModel} onRequestClose={()=> this.toggleModal()}
+                 animationType={'slide'} transparent={false} >
+                     <View style={styles.modal}>
+                         <View style={styles.modalTitle}><Text style={{color:'white', fontSize: 18, fontWeight: 'bold',}}>Your Reservation </Text>
+                         </View>
+                         <View style={styles.modalText}><Text>Number of Guests: {this.state.guests}</Text></View>
+                         <View style={styles.modalText}><Text>Outside: {this.state.outside? "yes": "No"}</Text></View>
+                         <View style={styles.modalText}><Text>Date and Time :{this.state.date}</Text></View>
+                         <Button title={'cancel'} onPress={()=>{this.toggleModal();this.formReset();}}
+                          color="#512DA8"/>
+                     </View>
+                </Modal>
             </ScrollView>
         );
     }
