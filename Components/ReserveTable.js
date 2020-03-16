@@ -128,7 +128,7 @@ class Reservation extends Component
                          <View style={styles.modalText}><Text>Number of Guests: {this.state.guests}</Text></View>
                          <View style={styles.modalText}><Text>Outside: {this.state.outside? "yes": "No"}</Text></View>
                          <View style={styles.modalText}><Text>Date and Time :{this.state.date}</Text></View>
-                         <Button title={'cancel'} onPress={()=>{this.toggleModal();this.formReset();}}
+                         <Button title={'close'} onPress={()=>{this.toggleModal();this.formReset();}}
                           color="#512DA8"/>
                      </View>
                 </Modal>

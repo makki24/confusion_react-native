@@ -4355,6 +4355,11 @@ react-native-safe-area-view@^0.7.0:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
+react-native-stars@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-stars/-/react-native-stars-1.1.6.tgz#b9e8f5dade7b90488acc39c9f07074551a31d652"
+  integrity sha512-QnFgxHtGXlx2uPhG9w8pTQ27FBluSi5dVPtNVGhcOnaOSYp3hvVNbdCLfylLlJ7EjVDxsI3+GaO6wzzo/O3u3A==
+
 react-native-status-bar-height@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.4.0.tgz#de8cee4bb733a196167210d2d0bc1fa10acba3e3"
