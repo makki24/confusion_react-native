@@ -10,6 +10,7 @@ import {Icon} from "react-native-elements";
 import {connect} from "react-redux";
 import {fetchComments, fetchDishes,fetchLeaders, fetchPromos} from "../redux/ActionCreaters";
 import Reservation from "./ReserveTable";
+import Faviourate from "./FaviourateComponent";
 
 const MenuNavigator = createStackNavigator({
     Menu: {screen: Menu,
@@ -102,6 +103,29 @@ const ReservationNavigator = createStackNavigator({
         })
 });
 
+const FaviourateNavigator = createStackNavigator({
+   Faviourate: {screen: Faviourate,
+    navigationOptions:({navigation}) =>({
+        headerLeft: <Icon name={'menu'} size={24}
+                    color={'white'}
+                    onPress={()=>navigation.toggleDrawer() }
+        />
+})},
+    DishDetails: {screen :DishDetail}
+},
+    {
+        initialRouteName: 'Faviourate',
+        navigationOptions:{
+            headerStyle :{
+                backgroundColor: "#512DA8",
+            },
+            headerTintColor:'#fff',
+            headerTitleStyle: {
+                color:'#fff'
+            }
+        }
+});
+
 const CustomDrawerComponent=(props) =>(
     <ScrollView>
         <SafeAreaView style={styles.container}
@@ -159,7 +183,7 @@ const MainNavigator= createDrawerNavigator({
             title: "Contact us",
             drawerLabel: 'Contact us',
              drawerIcon:({tintColor}) =>
-                    (<Icon name={'address-card'} type={'font-awesome'} color={tintColor}
+                    (<Icon name={'address-card'} type={'font-awesome'} color={'tintColor'}
                            size={23} />)
         }
         },
@@ -170,7 +194,17 @@ const MainNavigator= createDrawerNavigator({
             title: "Reserve Table",
             drawerLabel: 'Reserve Table',
             drawerIcon:({tintColor}) =>
-                    (<Icon name={'cutlery'} type={'font-awesome'} color={tintColor}
+                    (<Icon name={'cutlery'} type={'font-awesome'} color={'tintColor'}
+                           size={23} />)
+        }
+        },
+     Faviourates: {
+        screen: FaviourateNavigator,
+        navigationOptions: {
+            title: "Faviourates",
+            drawerLabel: 'Faviourates',
+            drawerIcon:({tintColor}) =>
+                    (<Icon name={'heart'} type={'font-awesome'} color={'tintColor'}
                            size={23} />)
         }
         }
