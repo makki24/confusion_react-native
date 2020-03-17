@@ -10,6 +10,9 @@ export const faviourates = (state =[],action) =>
             else
                 return state.concat(action.payload);
 
+        case ActionTypes.DELETE_FAVIOURATES:
+            return state.filter((id) => id !== action.payload);
+
         default:
             return state;
     }
