@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {FlatList, Text, View} from "react-native";
+import {Alert, FlatList, Text, View} from "react-native";
 import {ListItem} from "react-native-elements";
 import {connect} from "react-redux";
 import {baseUrl} from "../shared/baseUrl";
@@ -37,10 +37,25 @@ class Faviourate extends Component
 
         const renderMenu =({item,index}) =>
         {
-             const rightButton =[{
-                text:'delete',
-                type:'delete' ,
-                onPress:()=>this.props.deleteFaviourates(item.id)
+             const rightButton =[
+                 {
+                     text: 'delete',
+                     type: 'delete',
+                     onPress: () =>
+                     {
+                         Alert.alert('Delete Faviourate', "Are you sure want to delete "+item.name+" as Faviourate ?",
+                             [{
+                                 text: 'cancel',
+                                 style: 'cancel',
+                                 onPress: () => console.log("")
+                             },
+                                 {
+                                     text: 'Yes',
+                                     onPress:()=>this.props.deleteFaviourates(item.id)
+                                 }],{
+                             cancelable:true
+                             });
+                     }
             }]
             return(
                 <Swipeout right={rightButton} autoClose={true}>
