@@ -77,6 +77,8 @@ class RenderDish extends Component
             showModal:!this.state.showModal
         })
     };
+
+    handleViewRef =(ref) => this.view=ref;
     render()
     {
         const recognizedrag =({dx}) =>
@@ -89,6 +91,7 @@ class RenderDish extends Component
         const dish=this.props.dish;
         const panResponder= PanResponder.create({
             onStartShouldSetPanResponder:(e,gestureState) => (true),
+            onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'Finished' : 'cancelled'));},
             onPanResponderEnd:(e,gestureState) => {
                 if(recognizedrag(gestureState))
                     Alert.alert('Add to Faviourate','Do you Want to add '+dish.name+' Faviourate ?',
@@ -101,7 +104,7 @@ class RenderDish extends Component
         if (dish != null)
         {
             return (
-                <Animatable.View animation={'fadeInDown'} {...panResponder.panHandlers}>
+                <Animatable.View animation={'fadeInDown'} ref={this.handleViewRef} {...panResponder.panHandlers}>
                     <Card featuredTitle={dish.name} image={{uri: baseUrl + dish.image}}>
                         <Text style={{margin: 10}}>{dish.description}</Text>
                         <View style={styles.icons}>
