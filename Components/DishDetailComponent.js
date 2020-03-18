@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 import {Card, Icon, AirbnbRating, Rating, Input} from "react-native-elements";
-import {FlatList, StyleSheet, ScrollView, Text, Modal, Button} from "react-native";
+import {FlatList, StyleSheet, ScrollView, Text, Modal, Button, PanResponder, Alert} from "react-native";
 import {View} from "react-native";
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -79,11 +79,29 @@ class RenderDish extends Component
     };
     render()
     {
+        const recognizedrag =({dx}) =>
+        {
+            if(dx<-200)
+                return true;
+            else
+                return  false;
+        }
         const dish=this.props.dish;
+        const panResponder= PanResponder.create({
+            onStartShouldSetPanResponder:(e,gestureState) => (true),
+            onPanResponderEnd:(e,gestureState) => {
+                if(recognizedrag(gestureState))
+                    Alert.alert('Add to Faviourate','Do you Want to add '+dish.name+' Faviourate ?',
+                        [{text:'cancel',style:'cancel',onPress:() =>console.log("Cancelled...")}
+                        ,{
+                            text:'Yes',onPress:()=>this.props.onPress(dish.id)
+                        }])
+            }
+        });
         if (dish != null)
         {
             return (
-                <Animatable.View animation={'fadeInDown'}>
+                <Animatable.View animation={'fadeInDown'} {...panResponder.panHandlers}>
                     <Card featuredTitle={dish.name} image={{uri: baseUrl + dish.image}}>
                         <Text style={{margin: 10}}>{dish.description}</Text>
                         <View style={styles.icons}>
