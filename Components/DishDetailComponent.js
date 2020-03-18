@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import Stars from 'react-native-stars';
 import {fetchFaviourates, postComment} from "../redux/ActionCreaters";
+import * as Animatable from 'react-native-animatable';
+
 
 const styles =StyleSheet.create({
     icons:{
@@ -81,57 +83,59 @@ class RenderDish extends Component
         if (dish != null)
         {
             return (
-                <Card featuredTitle={dish.name} image={{uri: baseUrl + dish.image}}>
-                    <Text style={{margin: 10}}>{dish.description}</Text>
-                    <View style={styles.icons}>
-                        <Icon name={this.props.favorite ? 'heart' : 'heart-o'}
-                              raised
-                              reverse
-                              onPress={()=>this.props.onPress(dish.id)}
-                              type={'font-awesome'}
-                              color={'#f50'}
-                        />
-                        <Icon name={'pencil'}
-                              raised
-                              reverse
-                              onPress={()=>this.toggleModal()}
-                              color={'#512DA8'}
-                              type={'font-awesome'}
-                        />
-                    </View>
-                    <View>
-                        <Modal visible={this.state.showModal} animationType={'fade'} transparent={false}>
-                            <Rating
-                             showRating
-                             startingValue={5}
-                             onFinishRating={(rating)=>this.ratingCompleted(rating)}/>
-                             <Input
-                                    leftIcon={<Icon
-                                              type={"font-awesome"}
-                                              name='user-o'
-                                              size={24}
-                                                   />}
-                                    leftIconContainerStyle={{marginRight:10}}
-                                    placeholder={'Author'}
-                                    onChangeText={(data)=>this.setState({name:data})}
-                                   />
-                             <Input
-                                    leftIcon={<Icon
-                                              type={"font-awesome"}
-                                              name='comment-o'
-                                              size={24}
-                                                   />}
-                                    leftIconContainerStyle={{marginRight:10}}
-                                    placeholder={'Comment'}  onChangeText={(data)=>this.setState({comment:data})}/>
-                             <View style={styles.buttons}>
-                                <Button title={'Submit'} onPress={()=>{this.handleSubmit();this.toggleModal();}} color={'#512DA8'} />
-                             </View>
-                            <View style={styles.buttons}>
-                                <Button title={'cancel'} onPress={()=>this.toggleModal()} color={'grey'} />
-                            </View>
-                        </Modal>
-                    </View>
-                </Card>
+                <Animatable.View animation={'fadeInDown'}>
+                    <Card featuredTitle={dish.name} image={{uri: baseUrl + dish.image}}>
+                        <Text style={{margin: 10}}>{dish.description}</Text>
+                        <View style={styles.icons}>
+                            <Icon name={this.props.favorite ? 'heart' : 'heart-o'}
+                                  raised
+                                  reverse
+                                  onPress={()=>this.props.onPress(dish.id)}
+                                  type={'font-awesome'}
+                                  color={'#f50'}
+                            />
+                            <Icon name={'pencil'}
+                                  raised
+                                  reverse
+                                  onPress={()=>this.toggleModal()}
+                                  color={'#512DA8'}
+                                  type={'font-awesome'}
+                            />
+                        </View>
+                        <View>
+                            <Modal visible={this.state.showModal} animationType={'fade'} transparent={false}>
+                                <Rating
+                                 showRating
+                                 startingValue={5}
+                                 onFinishRating={(rating)=>this.ratingCompleted(rating)}/>
+                                 <Input
+                                        leftIcon={<Icon
+                                                  type={"font-awesome"}
+                                                  name='user-o'
+                                                  size={24}
+                                                       />}
+                                        leftIconContainerStyle={{marginRight:10}}
+                                        placeholder={'Author'}
+                                        onChangeText={(data)=>this.setState({name:data})}
+                                       />
+                                 <Input
+                                        leftIcon={<Icon
+                                                  type={"font-awesome"}
+                                                  name='comment-o'
+                                                  size={24}
+                                                       />}
+                                        leftIconContainerStyle={{marginRight:10}}
+                                        placeholder={'Comment'}  onChangeText={(data)=>this.setState({comment:data})}/>
+                                 <View style={styles.buttons}>
+                                    <Button title={'Submit'} onPress={()=>{this.handleSubmit();this.toggleModal();}} color={'#512DA8'} />
+                                 </View>
+                                <View style={styles.buttons}>
+                                    <Button title={'cancel'} onPress={()=>this.toggleModal()} color={'grey'} />
+                                </View>
+                            </Modal>
+                        </View>
+                    </Card>
+                </Animatable.View>
             );
 
         } else
@@ -164,9 +168,11 @@ function RenderComments(props)
         </View>
     );
     return(
-        <Card title={'Comments'}>
-            <FlatList data={comments} renderItem={renderComm}  keyExtractor={(item)=>item.id.toString()} />
-        </Card>
+        <Animatable.View animation={'fadeInUp'}>
+            <Card title={'Comments'}>
+                <FlatList data={comments} renderItem={renderComm}  keyExtractor={(item)=>item.id.toString()} />
+            </Card>
+        </Animatable.View>
     );
 }
 
