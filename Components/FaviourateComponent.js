@@ -59,7 +59,7 @@ class Faviourate extends Component
                      }
             }]
             return(
-                <Swipeout right={rightButton} autoClose={true}>
+                <Swipeout right={rightButton}>
                    <Animatable.View animation={'fadeInRightBig'}>
                       <ListItem
                           key={index}
