@@ -3,7 +3,8 @@ import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal, Alert} from "
 import {Picker} from "react-native";
 import DatePicker from "react-native-datepicker";
 import * as Animatable from 'react-native-animatable';
-
+import {Notifications} from "expo";
+import * as Permissions from "expo-permissions"
 
 const styles =StyleSheet.create({
     formRow :{
@@ -50,6 +51,38 @@ class Reservation extends Component
         }
     }
 
+    async obtainNotificationPermission()
+    {
+        let permission=await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        if(permission.status!=='granted')
+        {
+            permission=await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if(permission.status!=='granted')
+            {
+                Alert.alert('Permission Not Granted ');
+            }
+        }
+
+        return permission;
+    }
+
+    async presentLocalNotification(date)
+    {
+        await this.obtainNotificationPermission();
+        Notifications.presentLocalNotificationAsync({
+            title:'Your reservation',
+            body: 'Reservation is  requested'+date,
+            ios:{
+                sound:true
+            },
+            android:{
+                sound:true,
+                vibrate:true,
+                color: '#512DA8'
+            }
+        })
+    }
+
      static navigationOptions={
             title: 'Reserve Table '
     }
@@ -63,7 +96,6 @@ class Reservation extends Component
     handleReserve()
     {
         console.log(JSON.stringify(this.state));
-/*        this.toggleModal(); */
         Alert.alert('Your Reservation OK ?','Number of Guests: '+this.state.guests+'\nSmoking ? '+
             this.state.outside+'\nDate and Time: '+this.state.date,[{
             text:'cancel',
@@ -72,7 +104,11 @@ class Reservation extends Component
         },
             {
                 text:'OK',
-                onPress:()=>this.formReset()
+                onPress:()=>
+                {
+                    this.presentLocalNotification(this.state.date);
+                    this.formReset();
+                }
             }])
     }
 
