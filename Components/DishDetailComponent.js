@@ -87,6 +87,13 @@ class RenderDish extends Component
                 return true;
             else
                 return  false;
+        };
+        const recognizedragRl =({dx}) =>
+        {
+            if( dx >200)
+                return true;
+            else
+                return false;
         }
         const dish=this.props.dish;
         const panResponder= PanResponder.create({
@@ -94,12 +101,14 @@ class RenderDish extends Component
             onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'Finished' : 'cancelled'));},
             onPanResponderEnd:(e,gestureState) => {
                 if(recognizedrag(gestureState))
-                    Alert.alert('Add to Faviourate','Do you Want to add '+dish.name+' Faviourate ?',
+                    Alert.alert('Add to Faviourate','Do you Want to add '+dish.name+' to Faviourate ?',
                         [{text:'cancel',style:'cancel',onPress:() =>console.log("Cancelled...")}
                         ,{
                             text:'Yes',onPress:()=>this.props.onPress(dish.id)
-                        }])
-            }
+                        }]);
+                if(recognizedragRl(gestureState))
+                    this.toggleModal();
+            },
         });
         if (dish != null)
         {

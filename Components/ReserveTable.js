@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal} from "react-native";
+import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal, Alert} from "react-native";
 import {Picker} from "react-native";
 import DatePicker from "react-native-datepicker";
+import * as Animatable from 'react-native-animatable';
+
 
 const styles =StyleSheet.create({
     formRow :{
@@ -61,7 +63,17 @@ class Reservation extends Component
     handleReserve()
     {
         console.log(JSON.stringify(this.state));
-        this.toggleModal();
+/*        this.toggleModal(); */
+        Alert.alert('Your Reservation OK ?','Number of Guests: '+this.state.guests+'\nSmoking ? '+
+            this.state.outside+'\nDate and Time: '+this.state.date,[{
+            text:'cancel',
+            style:'cancel',
+            onPress:()=>this.formReset()
+        },
+            {
+                text:'OK',
+                onPress:()=>this.formReset()
+            }])
     }
 
     formReset()
@@ -76,6 +88,7 @@ class Reservation extends Component
     {
 
         return(
+            <Animatable.View animation={"zoomIn"}>
             <ScrollView>
                    <View style={styles.formRow}>
                        <Text style={styles.formLable}>Number of guests</Text>
@@ -117,7 +130,7 @@ class Reservation extends Component
                         }
                     }} />
                 </View>
-                <View style={styles.formRow}>
+                <View style={{marginRight:18,marginLeft:18}}>
                     <Button title={'Reserve'} onPress={()=>this.handleReserve()} color={'#512DA8'} accessibilityLabel={'learn More'}/>
                 </View>
                  <Modal onDismiss={() =>this.toggleModal()} visible={this.state.showModel} onRequestClose={()=> this.toggleModal()}
@@ -133,6 +146,7 @@ class Reservation extends Component
                      </View>
                 </Modal>
             </ScrollView>
+            </Animatable.View>
         );
     }
 }
