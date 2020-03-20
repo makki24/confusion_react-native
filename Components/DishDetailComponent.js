@@ -1,6 +1,6 @@
 import React,{Component} from "react";
-import {Card, Icon, AirbnbRating, Rating, Input} from "react-native-elements";
-import {FlatList, StyleSheet, ScrollView, Text, Modal, Button, PanResponder, Alert} from "react-native";
+import {Card, Icon, Rating, Input} from "react-native-elements";
+import {FlatList, StyleSheet, ScrollView, Text, Modal, Button, PanResponder, Alert, Share} from "react-native";
 import {View} from "react-native";
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -81,6 +81,18 @@ class RenderDish extends Component
     handleViewRef =(ref) => this.view=ref;
     render()
     {
+        const shareDish=(title,message,url) =>
+        {
+            Share.share({
+                title:title,
+                message:title+" : "+message+" "+url,
+                url:url
+            },{
+                dialogTitle:'Share '+title
+            }
+            )
+        }
+
         const recognizedrag =({dx}) =>
         {
             if(dx<-200)
@@ -129,6 +141,13 @@ class RenderDish extends Component
                                   reverse
                                   onPress={()=>this.toggleModal()}
                                   color={'#512DA8'}
+                                  type={'font-awesome'}
+                            />
+                             <Icon name={'share'}
+                                  raised
+                                  reverse
+                                  onPress={()=>shareDish(dish.name,dish.description,baseUrl+dish.image)}
+                                  color={'green'}
                                   type={'font-awesome'}
                             />
                         </View>

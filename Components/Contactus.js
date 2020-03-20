@@ -1,10 +1,20 @@
 import React, {Component} from "react";
-import {Card} from "react-native-elements";
+import {Button, Card, Icon} from "react-native-elements";
 import {Text} from "react-native";
 import * as Animatable from 'react-native-animatable';
+import * as MailComposer from 'expo-mail-composer';
 
 class Contactus extends Component
 {
+
+    sendMain()
+    {
+        MailComposer.composeAsync({
+            recipients:['syedmaqthyar@gmail.com'],
+            subject:'Enquiry',
+            body:'To whoom it concerns'
+        });
+    }
 
     render()
     {
@@ -19,6 +29,12 @@ class Contactus extends Component
                         Fax: +852 8765 4321{'\n'}{'\n'}
                         Email:confusion@food.net
                     </Text>
+                    <Button
+                        title={'Send Email'}
+                        icon={<Icon name={'envelope-o'} type={"font-awesome"} iconStyle={{marginRight:10}}/> }
+                        onPress={this.sendMain}
+                        buttonStyle={{backgroundColor:'#512DA8'}}
+                        />
                 </Card>
             </Animatable.View>
         );
