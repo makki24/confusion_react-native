@@ -6,6 +6,7 @@ import {baseUrl} from "../shared/baseUrl";
 import {createBottomTabNavigator} from 'react-navigation'
 import * as Permission from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 class LoginTab extends Component
 {
@@ -141,18 +142,34 @@ class RegisterTab extends Component
         {
             let captureImage= await ImagePicker.launchCameraAsync({
                 allowsEditing:true,
-                aspect:[3,4]
+                aspect:[4,3]
             });
 
             if(captureImage.cancelled===false)
             {
                 console.log(captureImage);
-                this.setState({
+                this.processImage(captureImage.uri);
+               /* this.setState({
                     imageUrl: captureImage.uri
-                });
+                });  */
             }
         }
+    };
+    processImage = async (uri) =>
+    {
+            let processedImage= await ImageManipulator.manipulateAsync(
+                uri,
+                [
+                    {resize:{width:400}}
+                ],
+                {format:'png'}
+            );
+            console.log(processedImage);
+            this.setState({
+                imageUrl: processedImage.uri
+            });
     }
+
     render()
     {
         return(

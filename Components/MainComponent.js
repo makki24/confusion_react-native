@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import Home  from "./HomeComponent";
 import Menu from "./MenuComponent";
 import DishDetail from "./DishDetailComponent";
-import {Platform, SafeAreaView, ScrollView, View, StyleSheet,Text,Image} from "react-native";
+import {Platform, SafeAreaView, ScrollView, View, StyleSheet, Text, Image, ToastAndroid} from "react-native";
 import {createDrawerNavigator,createStackNavigator,DrawerItems} from "react-navigation";
 import Contactus from "./Contactus";
 import Aboutus from "./Aboutus";
@@ -12,7 +12,7 @@ import {fetchComments, fetchDishes,fetchLeaders, fetchPromos} from "../redux/Act
 import Reservation from "./ReserveTable";
 import Faviourate from "./FaviourateComponent";
 import Login from "./LoginComponent";
-
+import NetInfo from "@react-native-community/netinfo";
 const MenuNavigator = createStackNavigator({
     Menu: {screen: Menu,
     navigationOptions:({navigation}) =>({
@@ -267,9 +267,33 @@ class Main extends Component
     this.props.fetchComments();
     this.props.fetchPromos();
     this.props.fetchLeaders();
+
+    NetInfo.addEventListener(state =>
+    {
+      this.handleConnectivityChange(state);
+    });
   };
 
-
+  handleConnectivityChange =(connectionInfo) =>
+  {
+      switch (connectionInfo.type)
+      {
+          case 'none':
+            ToastAndroid.show('You are now offline!', ToastAndroid.LONG);
+            break;
+          case 'wifi':
+            ToastAndroid.show('You are now connected to WiFi!', ToastAndroid.LONG);
+            break;
+          case 'cellular':
+            ToastAndroid.show('You are now connected to Cellular!', ToastAndroid.LONG);
+            break;
+          case 'unknown':
+            ToastAndroid.show('You now have unknown connection!', ToastAndroid.LONG);
+            break;
+          default:
+            break;
+      }
+  }
     render() {
         console.disableYellowBox = true;
         return (
