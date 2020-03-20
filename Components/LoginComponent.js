@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, StyleSheet, ScrollView,Image} from "react-native";
+import {View, StyleSheet, ScrollView, Image, ToastAndroid} from "react-native";
 import {CheckBox, Button, Input, Icon} from "react-native-elements";
 import * as SecureStore from 'expo-secure-store'
 import {baseUrl} from "../shared/baseUrl";
@@ -155,6 +155,18 @@ class RegisterTab extends Component
             }
         }
     };
+    async handleGallery()
+    {
+            let pickImage=await ImagePicker.launchImageLibraryAsync({
+                allowsEditing:true,
+                aspect:[4,3]
+            });
+
+            if(pickImage.cancelled===false)
+            {
+                this.processImage(pickImage.uri);
+            }
+    }
     processImage = async (uri) =>
     {
             let processedImage= await ImageManipulator.manipulateAsync(
@@ -182,6 +194,9 @@ class RegisterTab extends Component
                        />
                        <Button title={'camera'} icon={{type:"font-awesome",name:'camera'}}
                        onPress={()=>this.handleCamera()}
+                       />
+                       <Button title={'gallery'} icon={{type:"font-awesome",name:'image'}}
+                       onPress={()=>this.handleGallery()}
                        />
                    </View>
                    <Input
@@ -269,7 +284,8 @@ const styles=StyleSheet.create({
      imageContainer: {
         flex: 1,
         flexDirection: 'row',
-        margin: 20
+        margin: 20,
+        justifyContent: 'space-around'
     },
     image: {
       margin: 10,

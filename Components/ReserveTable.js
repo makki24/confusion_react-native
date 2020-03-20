@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal, Alert} from "react-native";
+import {ScrollView, Text, View, StyleSheet, Switch, Button, Modal, Alert, ToastAndroid} from "react-native";
 import {Picker} from "react-native";
 import DatePicker from "react-native-datepicker";
 import * as Animatable from 'react-native-animatable';
 import {Notifications} from "expo";
 import * as Permissions from "expo-permissions"
+import * as Calendar from "expo-calendar";
 
 const styles =StyleSheet.create({
     formRow :{
@@ -66,6 +67,25 @@ class Reservation extends Component
         return permission;
     }
 
+    async handleCalendar(date)
+    {
+        const cal_permission= await Permissions.askAsync(Permissions.CALENDAR);
+
+        if(cal_permission.status==='granted')
+        {
+            console.log("Start is "+new Date(Date.parse(date)));
+            console.log("End is "+new Date(Date.parse(date)+7200000));
+            Calendar.createEventAsync('1',{
+                title: 'Confusion Table Reservation',
+                startDate:new Date(Date.parse(date)),
+                endDate:new Date(Date.parse(date)+7200000),
+                timeZone:"Asia/Kolkata",
+                location:'121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+            });
+        }
+        else
+            console.log("not granted");
+    }
     async presentLocalNotification(date)
     {
         await this.obtainNotificationPermission();
@@ -107,6 +127,7 @@ class Reservation extends Component
                 onPress:()=>
                 {
                     this.presentLocalNotification(this.state.date);
+                    this.handleCalendar(this.state.date);
                     this.formReset();
                 }
             }])
